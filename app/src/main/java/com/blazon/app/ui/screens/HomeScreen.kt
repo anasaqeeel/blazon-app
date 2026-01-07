@@ -3,14 +3,17 @@ package com.blazon.app.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -245,12 +248,16 @@ fun HomeScreen(
                                 modifier = Modifier.padding(bottom = 12.dp)
                             )
                             
-                            LazyColumn(
+                            LazyRow(
+                                modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                                modifier = Modifier.fillMaxWidth()
+                                contentPadding = PaddingValues(horizontal = 0.dp, vertical = 4.dp)
                             ) {
                                 items(state.promotions) { promo ->
-                                    PromotionCard(promotion = promo)
+                                    PromotionCard(
+                                        promotion = promo,
+                                        modifier = Modifier.width(280.dp)
+                                    )
                                 }
                             }
                         }
@@ -336,31 +343,40 @@ fun BarberCard(availability: com.blazon.app.data.model.BarberAvailability) {
 }
 
 @Composable
-fun PromotionCard(promotion: com.blazon.app.data.model.Promotion) {
-    GradientCard {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+fun PromotionCard(
+    promotion: com.blazon.app.data.model.Promotion,
+    modifier: Modifier = Modifier
+) {
+    GradientCard(modifier = modifier) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
                 Text(
                     text = promotion.title,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = BlazonForeground
+                    color = BlazonForeground,
+                    modifier = Modifier.weight(1f)
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = promotion.description,
-                    fontSize = 14.sp,
-                    color = BlazonMutedForeground
+                    text = "${promotion.discount}%",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = BlazonGold
                 )
             }
+            Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = "${promotion.discount}%",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = BlazonGold
+                text = promotion.description,
+                fontSize = 13.sp,
+                color = BlazonMutedForeground,
+                lineHeight = 18.sp
             )
         }
     }

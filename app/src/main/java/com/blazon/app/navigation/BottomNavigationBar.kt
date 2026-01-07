@@ -42,7 +42,8 @@ fun BlazonBottomNavigationBar(
     NavigationBar(
         modifier = modifier,
         containerColor = BlazonCard,
-        contentColor = BlazonForeground
+        contentColor = BlazonForeground,
+        tonalElevation = 8.dp
     ) {
         items.forEach { item ->
             val isSelected = currentRoute == item.route
@@ -51,29 +52,24 @@ fun BlazonBottomNavigationBar(
                 selected = isSelected,
                 onClick = { onNavigate(item.route) },
                 icon = {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = item.icon,
-                            fontSize = 24.sp
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = item.label,
-                            fontSize = 10.sp,
-                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                            color = if (isSelected) BlazonGold else BlazonMutedForeground
-                        )
-                    }
+                    Text(
+                        text = item.icon,
+                        fontSize = 24.sp
+                    )
+                },
+                label = {
+                    Text(
+                        text = item.label,
+                        fontSize = 11.sp,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                    )
                 },
                 colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
                     selectedIconColor = BlazonGold,
                     selectedTextColor = BlazonGold,
-                    indicatorColor = BlazonGold.copy(alpha = 0.1f),
-                    unselectedIconColor = BlazonMutedForeground,
-                    unselectedTextColor = BlazonMutedForeground
+                    indicatorColor = BlazonGold.copy(alpha = 0.15f),
+                    unselectedIconColor = BlazonMutedForeground.copy(alpha = 0.85f),
+                    unselectedTextColor = BlazonMutedForeground.copy(alpha = 0.9f)
                 )
             )
         }

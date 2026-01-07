@@ -85,8 +85,9 @@ fun MembershipScreen(
                     LazyColumn(
                         modifier = Modifier
                             .weight(1f)
-                            .fillMaxWidth(),
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp, bottom = 100.dp),
+                            .fillMaxWidth()
+                            .padding(bottom = 100.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         items(state.services) { service ->
