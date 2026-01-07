@@ -1,0 +1,79 @@
+═══════════════════════════════════════════════════════════════
+   🚀 BLASON ANDROID APP - QUICK START GUIDE
+═══════════════════════════════════════════════════════════════
+
+✅ YES! IT'S 100% READY TO RUN!
+
+═══════════════════════════════════════════════════════════════
+   STEP-BY-STEP INSTRUCTIONS
+═══════════════════════════════════════════════════════════════
+
+1️⃣  OPEN ANDROID STUDIO
+   → Open Android Studio
+   → Click "Open" or File → Open
+   → Navigate to: /home/anas/Desktop/BLAZON/v0.dev/blazon-mobile-app/android
+   → Select the "android" folder
+   → Click OK
+
+2️⃣  WAIT FOR GRADLE SYNC
+   → Android Studio will automatically sync
+   → Wait 2-5 minutes for dependencies to download
+   → Look for "Gradle sync finished" in bottom status bar
+   → If errors appear, try: File → Invalidate Caches → Restart
+
+3️⃣  SET UP EMULATOR (if no physical device)
+   → Click "Device Manager" tab (right side)
+   → Click "Create Device"
+   → Select "Pixel 6" or "Pixel 7"
+   → Select "API 34" (Android 14)
+   → Click Finish
+
+4️⃣  RUN THE APP! 🎉
+   → Click the green ▶️ "Run" button (top toolbar)
+   → OR press Shift + F10
+   → Select your emulator/device
+   → Click Run
+   → Wait 2-5 minutes for first build
+   → App launches automatically!
+
+═══════════════════════════════════════════════════════════════
+   WHAT YOU'LL SEE
+═══════════════════════════════════════════════════════════════
+
+1. Splash Screen (2 seconds) - "Blazon" logo
+2. Branch Selection - Choose a salon branch
+3. Home Screen - Main dashboard
+4. Bottom Navigation - 4 tabs (Home, Services, Scan, Settings)
+
+═══════════════════════════════════════════════════════════════
+   TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+❌ Gradle sync failed?
+   → Check internet connection
+   → File → Invalidate Caches → Restart
+
+❌ SDK not found?
+   → Tools → SDK Manager
+   → Install "Android SDK Platform 34"
+
+❌ Build failed?
+   → Check Build tab for specific errors
+   → Most issues auto-fix on sync
+
+═══════════════════════════════════════════════════════════════
+   REQUIREMENTS
+═══════════════════════════════════════════════════════════════
+
+✅ Android Studio (latest)
+✅ Android SDK 34
+✅ JDK 17
+✅ Internet (for first sync)
+✅ 4GB+ RAM (for emulator)
+
+═══════════════════════════════════════════════════════════════
+
+📖 For detailed instructions, see: SETUP_INSTRUCTIONS.md
+
+═══════════════════════════════════════════════════════════════
+
