@@ -43,51 +43,49 @@ object MockDataRepository {
     private fun createServicesForAllBranches(): List<Service> {
         val allBranchIds = branches.map { it.id }
         val serviceTemplates = listOf(
-            // HAIR SERVICES
-            Service("s1", "Regular Haircut (Wash & Styling)", ServiceCategory.Hair, 1500, 45, "", "Professional haircut with wash and styling"),
-            Service("s2", "Regular Style", ServiceCategory.Hair, 500, 20, "", "Basic hair styling"),
-            Service("s3", "Fiber Styling", ServiceCategory.Hair, 700, 25, "", "Premium fiber-based styling"),
+            // HAIR SERVICES (from handwritten menu)
+            Service("s1", "Haircut", ServiceCategory.Hair, 1500, 45, "", "Professional haircut (30-45 mins)"),
+            Service("s2", "Regular Styling", ServiceCategory.Hair, 700, 15, "", "Basic hair styling"),
+            Service("s3", "Fiber Styling", ServiceCategory.Hair, 1000, 15, "", "Premium fiber-based styling"),
             Service("s4", "Hair-Do", ServiceCategory.Hair, 700, 30, "", "Complete hair styling service"),
-            Service("s45", "Hair Cut", ServiceCategory.Hair, 1500, 30, "", "Professional haircut"),
-            Service("s46", "Shampoo", ServiceCategory.Hair, 500, 15, "", "Hair shampoo service"),
-            Service("s47", "Deep Condition", ServiceCategory.Hair, 800, 20, "", "Deep hair conditioning treatment"),
-            Service("s48", "Hair Shine Boost", ServiceCategory.Hair, 2000, 40, "", "Hair shine enhancement"),
-            Service("s49", "Hair Shine Enhance", ServiceCategory.Hair, 2000, 40, "", "Premium hair shine treatment"),
+            Service("s45", "Shampoo", ServiceCategory.Hair, 500, 15, "", "Hair shampoo service"),
+            Service("s46", "Deep Condition", ServiceCategory.Hair, 800, 20, "", "Deep hair conditioning treatment"),
+            Service("s47", "Hair Shine Boost", ServiceCategory.Hair, 2000, 40, "", "Hair shine enhancement"),
             
-            // BEARD SERVICES
-            Service("s5", "Beard Reshaping (Cleansing & Scrubbing)", ServiceCategory.Beard, 800, 30, "", "Complete beard grooming with cleansing"),
+            // BEARD SERVICES (from handwritten menu)
+            Service("s5", "Beard Reshaping", ServiceCategory.Beard, 800, 30, "", "Complete beard reshaping with cleansing & scrubbing"),
             Service("s50", "Beard Trim/Shave", ServiceCategory.Beard, 800, 25, "", "Professional beard trim or shave"),
             Service("s51", "Shave", ServiceCategory.Beard, 600, 20, "", "Clean shave service"),
             
-            // COLORING SERVICES
-            Service("s6", "Keune Hair Color", ServiceCategory.Coloring, 700, 40, "", "Keune professional hair coloring"),
-            Service("s7", "L'Oreal Hair Color", ServiceCategory.Coloring, 1000, 45, "", "L'Oreal premium hair coloring"),
-            Service("s8", "Keune Full Color", ServiceCategory.Coloring, 2800, 60, "", "Complete Keune coloring service"),
-            Service("s9", "Fashion Color", ServiceCategory.Coloring, 3000, 60, "", "Trendy fashion colors (2500-3500)"),
-            Service("s10", "Color Repair", ServiceCategory.Coloring, 9000, 90, "", "Professional color correction (8000-10000)"),
-            Service("s11", "L'Oreal Full Color", ServiceCategory.Coloring, 4750, 75, "", "Complete L'Oreal service (3500-6000)"),
-            Service("s12", "Just For Men Color", ServiceCategory.Coloring, 4500, 60, "", "Men's specialized coloring (3000-6000)"),
+            // COLORING SERVICES (from handwritten menu)
+            Service("s6", "Hair Coloring", ServiceCategory.Coloring, 2500, 45, "", "Professional hair coloring"),
+            Service("s7", "Keune Hair Color", ServiceCategory.Coloring, 700, 40, "", "Keune professional hair coloring"),
+            Service("s8", "L'Oreal Hair Color", ServiceCategory.Coloring, 1000, 45, "", "L'Oreal premium hair coloring"),
+            Service("s9", "Keune Full Color", ServiceCategory.Coloring, 2800, 60, "", "Complete Keune coloring service"),
+            Service("s10", "Fashion Color", ServiceCategory.Coloring, 3000, 60, "", "Trendy fashion colors"),
+            Service("s11", "Color Repair", ServiceCategory.Coloring, 9000, 90, "", "Professional color correction"),
+            Service("s12", "L'Oreal Full Color", ServiceCategory.Coloring, 4750, 75, "", "Complete L'Oreal service"),
             Service("s52", "Hair Dye", ServiceCategory.Coloring, 1500, 45, "", "Professional hair dye service"),
             
-            // TREATMENTS
-            Service("s13", "Protein Dose", ServiceCategory.Treatments, 3000, 60, "", "Hair protein treatment"),
-            Service("s14", "Dandruff Control", ServiceCategory.Treatments, 1000, 45, "", "Anti-dandruff treatment"),
-            Service("s15", "Moisture Reback", ServiceCategory.Treatments, 1000, 45, "", "Deep moisture restoration"),
-            Service("s16", "Shine Enhance", ServiceCategory.Treatments, 2500, 50, "", "Hair shine enhancement treatment"),
+            // TREATMENTS (from handwritten menu)
+            Service("s13", "Protein Dose", ServiceCategory.Treatments, 3000, 45, "", "Hair protein treatment"),
+            Service("s14", "Dandruff Control", ServiceCategory.Treatments, 1000, 30, "", "Anti-dandruff treatment"),
+            Service("s15", "Shine Enhance", ServiceCategory.Treatments, 3000, 45, "", "Hair shine enhancement treatment"),
+            Service("s16", "Moisture Reback", ServiceCategory.Treatments, 1000, 45, "", "Deep moisture restoration"),
             
-            // TEXTURE SERVICES
-            Service("s17", "Hair Keratin", ServiceCategory.Texture, 13000, 120, "", "Keratin smoothing treatment (6000-20000)"),
-            Service("s18", "Hair Botox", ServiceCategory.Texture, 18500, 150, "", "Hair botox treatment (7000-30000)"),
-            Service("s19", "Hair Perming", ServiceCategory.Texture, 19000, 180, "", "Professional hair perming (8000-30000)"),
+            // TEXTURE SERVICES (from handwritten menu - price ranges)
+            Service("s17", "Hair Keratin", ServiceCategory.Texture, 13000, 105, "", "Keratin smoothing treatment (Rs. 6,000 - 20,000)"),
+            Service("s18", "Hair Botox", ServiceCategory.Texture, 14500, 105, "", "Hair botox treatment (Rs. 7,000 - 22,000)"),
+            Service("s19", "Hair Perming", ServiceCategory.Texture, 19000, 180, "", "Professional hair perming"),
             
-            // SKIN - FACIALS
-            Service("s20", "Dermalogica Facial", ServiceCategory.Skin, 10000, 90, "", "Premium Dermalogica facial treatment"),
-            Service("s21", "Thalgo Facial", ServiceCategory.Skin, 8500, 75, "", "Thalgo professional facial"),
+            // SKIN - FACIALS (from handwritten menu - all facials 60 mins)
+            Service("s20", "Dermalogica Facial", ServiceCategory.Skin, 10000, 60, "", "Premium Dermalogica facial treatment"),
+            Service("s21", "Thalgo Facial", ServiceCategory.Skin, 8500, 60, "", "Thalgo professional facial"),
             Service("s22", "Conatural Facial", ServiceCategory.Skin, 7000, 60, "", "Natural facial treatment"),
             Service("s23", "Janssen Facial", ServiceCategory.Skin, 6500, 60, "", "Janssen skincare facial"),
-            Service("s24", "Skin Care Facial", ServiceCategory.Skin, 4500, 45, "", "Basic skincare facial"),
-            Service("s25", "Combination Facial", ServiceCategory.Skin, 3000, 40, "", "Combination skin treatment"),
-            Service("s53", "Janssen Whitening Facial", ServiceCategory.Skin, 7000, 75, "", "Janssen whitening facial treatment"),
+            Service("s24", "Skin Care Facial", ServiceCategory.Skin, 4500, 60, "", "Basic skincare facial"),
+            Service("s25", "Combination Facial", ServiceCategory.Skin, 3000, 60, "", "Combination skin treatment"),
+            Service("s53", "Janssen Whitening Facial", ServiceCategory.Skin, 7000, 60, "", "Janssen whitening facial treatment"),
             Service("s54", "Cleansing", ServiceCategory.Skin, 1500, 30, "", "Deep skin cleansing"),
             Service("s55", "Exfoliation", ServiceCategory.Skin, 2000, 35, "", "Skin exfoliation treatment"),
             Service("s56", "Face Mask", ServiceCategory.Skin, 1500, 25, "", "Face mask treatment"),
@@ -129,10 +127,10 @@ object MockDataRepository {
             Service("s40", "Nose Wax", ServiceCategory.Wax, 500, 10, "", "Nose waxing"),
             Service("s41", "Ear Wax", ServiceCategory.Wax, 500, 10, "", "Ear waxing"),
             
-            // GROOMING
-            Service("s42", "Party Grooming", ServiceCategory.Grooming, 4500, 90, "", "Complete party grooming package"),
-            Service("s43", "Special Effects", ServiceCategory.Grooming, 3500, 75, "", "Special effects makeup (3000-4000)"),
-            Service("s44", "Character Make-up", ServiceCategory.Grooming, 3750, 80, "", "Character makeup service (3000-4500)")
+            // GROOMING (from handwritten menu)
+            Service("s42", "Party Grooming", ServiceCategory.Grooming, 5000, 90, "", "Complete party grooming package"),
+            Service("s43", "Special Effects", ServiceCategory.Grooming, 3500, 75, "", "Special effects makeup"),
+            Service("s44", "Character Make-up", ServiceCategory.Grooming, 3750, 80, "", "Character makeup service")
         )
         
         // Create services for all branches
