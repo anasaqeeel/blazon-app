@@ -36,21 +36,24 @@ fun MembershipScreen(
     viewModel: MembershipViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val selectedServices by viewModel.selectedServices.collectAsState()
+    val serviceQuantities by viewModel.serviceQuantities.collectAsState()
     val isCreating by viewModel.isCreating.collectAsState()
     
-    var showPackages by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(true) }
-    var showCustomMembership by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+    var showPackages by remember { mutableStateOf(true) }
+    var showCustomMembership by remember { mutableStateOf(false) }
     
     androidx.compose.runtime.LaunchedEffect(branchId) {
         viewModel.loadServices(branchId)
     }
     
     // Calculate prices with 15% discount
-    val totalPrice = selectedServices.sumOf { it.price }
+    val totalPrice = viewModel.getTotalPrice()
+    val totalDuration = viewModel.getTotalDuration()
+    val totalServices = viewModel.getTotalServices()
     val discountPercent = 15
     val discountAmount = (totalPrice * discountPercent) / 100
     val finalPrice = totalPrice - discountAmount
+    val hasSelections = viewModel.hasSelectedServices()
     
     Box(
         modifier = Modifier
@@ -173,7 +176,7 @@ fun MembershipScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth()
-                                .padding(bottom = if (selectedServices.isNotEmpty()) 180.dp else 80.dp),
+                                .padding(bottom = if (hasSelections) 220.dp else 80.dp),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
@@ -228,10 +231,11 @@ fun MembershipScreen(
                             }
                             
                             items(state.services) { service ->
-                                MembershipServiceCard(
+                                MembershipServiceCardWithQuantity(
                                     service = service,
-                                    isSelected = selectedServices.contains(service),
-                                    onClick = { viewModel.toggleService(service) }
+                                    quantity = serviceQuantities[service.id] ?: 0,
+                                    onIncrease = { viewModel.increaseQuantity(service) },
+                                    onDecrease = { viewModel.decreaseQuantity(service) }
                                 )
                             }
                         }
@@ -253,7 +257,7 @@ fun MembershipScreen(
         }
         
         // Summary Bottom Sheet for Custom Membership
-        if (selectedServices.isNotEmpty() && showCustomMembership) {
+        if (hasSelections && showCustomMembership) {
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -395,13 +399,13 @@ fun MembershipScreen(
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "${selectedServices.size}",
+                            text = "$totalServices",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = BlazonGold
                         )
                         Text(
-                            text = "Services",
+                            text = "Items",
                             fontSize = 11.sp,
                             color = BlazonMutedForeground
                         )
@@ -409,7 +413,7 @@ fun MembershipScreen(
                     
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "${selectedServices.sumOf { it.duration }}",
+                            text = "$totalDuration",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = BlazonGold
@@ -429,6 +433,151 @@ fun MembershipScreen(
                     onClick = { viewModel.createMembership(userId, branchId) },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !isCreating
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MembershipServiceCardWithQuantity(
+    service: com.blazon.app.data.model.Service,
+    quantity: Int,
+    onIncrease: () -> Unit,
+    onDecrease: () -> Unit
+) {
+    val isSelected = quantity > 0
+    
+    PremiumCard(
+        isHighlighted = isSelected
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Service info
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = service.name,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = BlazonForeground
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = service.category.name,
+                        fontSize = 11.sp,
+                        color = BlazonMutedForeground
+                    )
+                    Text(
+                        text = " • ",
+                        fontSize = 11.sp,
+                        color = BlazonMutedForeground
+                    )
+                    Text(
+                        text = "${service.duration} min",
+                        fontSize = 11.sp,
+                        color = BlazonMutedForeground
+                    )
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Rs. ${service.price}",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = BlazonGold
+                )
+            }
+            
+            // Quantity controls
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Minus button
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .background(
+                            if (quantity > 0) BlazonGold.copy(alpha = 0.2f) else BlazonSecondary,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .clickable(enabled = quantity > 0) { onDecrease() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "−",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (quantity > 0) BlazonGold else BlazonMutedForeground
+                    )
+                }
+                
+                // Quantity display
+                Box(
+                    modifier = Modifier
+                        .width(40.dp)
+                        .background(
+                            if (quantity > 0) BlazonGold else BlazonCard,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(vertical = 8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "$quantity",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (quantity > 0) BlazonBlack else BlazonMutedForeground
+                    )
+                }
+                
+                // Plus button
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .background(
+                            if (quantity < 5) BlazonGold else BlazonSecondary,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .clickable(enabled = quantity < 5) { onIncrease() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "+",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (quantity < 5) BlazonBlack else BlazonMutedForeground
+                    )
+                }
+            }
+        }
+        
+        // Show total if quantity > 1
+        if (quantity > 1) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        BlazonGold.copy(alpha = 0.1f),
+                        shape = RoundedCornerShape(6.dp)
+                    )
+                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "$quantity × Rs. ${service.price}",
+                    fontSize = 12.sp,
+                    color = BlazonMutedForeground
+                )
+                Text(
+                    text = "= Rs. ${service.price * quantity}",
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = BlazonGold
                 )
             }
         }
