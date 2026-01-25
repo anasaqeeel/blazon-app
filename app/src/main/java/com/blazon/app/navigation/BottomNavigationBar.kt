@@ -40,10 +40,10 @@ fun BlazonBottomNavigationBar(
     )
     
     NavigationBar(
-        modifier = modifier,
+        modifier = modifier.height(60.dp),
         containerColor = BlazonCard,
         contentColor = BlazonForeground,
-        tonalElevation = 8.dp
+        tonalElevation = 0.dp
     ) {
         items.forEach { item ->
             val isSelected = currentRoute == item.route
@@ -54,22 +54,22 @@ fun BlazonBottomNavigationBar(
                 icon = {
                     Text(
                         text = item.icon,
-                        fontSize = 24.sp
+                        fontSize = 20.sp
                     )
                 },
                 label = {
                     Text(
                         text = item.label,
-                        fontSize = 11.sp,
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                        fontSize = 10.sp,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                     )
                 },
                 colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
                     selectedIconColor = BlazonGold,
                     selectedTextColor = BlazonGold,
-                    indicatorColor = BlazonGold.copy(alpha = 0.15f),
-                    unselectedIconColor = BlazonMutedForeground.copy(alpha = 0.85f),
-                    unselectedTextColor = BlazonMutedForeground.copy(alpha = 0.9f)
+                    indicatorColor = BlazonGold.copy(alpha = 0.1f),
+                    unselectedIconColor = BlazonMutedForeground.copy(alpha = 0.7f),
+                    unselectedTextColor = BlazonMutedForeground.copy(alpha = 0.7f)
                 )
             )
         }
