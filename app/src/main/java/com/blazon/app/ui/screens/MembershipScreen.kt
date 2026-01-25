@@ -190,7 +190,7 @@ fun MembershipScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth()
-                                .padding(bottom = if (hasSelections) 80.dp else 0.dp),
+                                .padding(bottom = if (hasSelections) 70.dp else 0.dp),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {

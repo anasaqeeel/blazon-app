@@ -1,6 +1,7 @@
 package com.blazon.app.navigation
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,11 +27,17 @@ fun BlazonNavGraph(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     
+    val showBottomNav = currentRoute != null && 
+        currentRoute != Screen.Splash.route && 
+        currentRoute != Screen.BranchSelection.route
+    
     Box(modifier = Modifier.fillMaxSize()) {
         NavHost(
             navController = navController,
             startDestination = startDestination,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = if (showBottomNav) 80.dp else 0.dp)
         ) {
             composable(Screen.Splash.route) {
                 SplashScreen(
@@ -120,8 +127,7 @@ fun BlazonNavGraph(
         }
         
         // Bottom Navigation Bar
-        if (currentRoute != null && currentRoute != Screen.Splash.route && 
-            currentRoute != Screen.BranchSelection.route) {
+        if (showBottomNav) {
             BlazonBottomNavigationBar(
                 currentRoute = currentRoute,
                 onNavigate = { route ->
