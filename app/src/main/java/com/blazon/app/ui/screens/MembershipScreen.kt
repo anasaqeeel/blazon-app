@@ -176,7 +176,7 @@ fun MembershipScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth()
-                                .padding(bottom = if (hasSelections) 220.dp else 80.dp),
+                                .padding(bottom = if (hasSelections) 100.dp else 80.dp),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
@@ -256,184 +256,119 @@ fun MembershipScreen(
             }
         }
         
-        // Summary Bottom Sheet for Custom Membership
+        // Compact Floating Cart Bar
         if (hasSelections && showCustomMembership) {
-            Column(
+            Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
                     .background(
                         BlazonCard,
-                        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+                        shape = RoundedCornerShape(16.dp)
                     )
-                    .padding(20.dp)
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Discount Badge
+                // Left: Items count badge + Price info
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            BlazonGold.copy(alpha = 0.15f),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .padding(12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = "🎉",
-                            fontSize = 24.sp
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Column {
-                            Text(
-                                text = "15% Membership Discount",
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = BlazonGold
-                            )
-                            Text(
-                                text = "Save Rs. $discountAmount",
-                                fontSize = 12.sp,
-                                color = BlazonMutedForeground
-                            )
-                        }
-                    }
-                }
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                // Price Breakdown
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            BlazonSecondary.copy(alpha = 0.5f),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                    // Items badge
+                    Box(
+                        modifier = Modifier
+                            .size(44.dp)
+                            .background(BlazonGold, shape = RoundedCornerShape(12.dp)),
+                        contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "Subtotal",
-                            fontSize = 14.sp,
-                            color = BlazonMutedForeground
-                        )
-                        Text(
-                            text = "Rs. $totalPrice",
-                            fontSize = 14.sp,
-                            color = BlazonForeground
+                            text = "$totalServices",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = BlazonBlack
                         )
                     }
                     
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                    // Price column
+                    Column {
+                        // Crossed original price
+                        if (discountAmount > 0) {
                             Text(
-                                text = "Discount (15%)",
-                                fontSize = 14.sp,
-                                color = BlazonMutedForeground
+                                text = "Rs. $totalPrice",
+                                fontSize = 12.sp,
+                                color = BlazonMutedForeground,
+                                textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
+                        }
+                        // Final price
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Text(
+                                text = "Rs. $finalPrice",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = BlazonGold
+                            )
+                            // Discount badge
                             Box(
                                 modifier = Modifier
                                     .background(
                                         BlazonGold.copy(alpha = 0.2f),
                                         shape = RoundedCornerShape(4.dp)
                                     )
-                                    .padding(horizontal = 6.dp, vertical = 2.dp)
+                                    .padding(horizontal = 5.dp, vertical = 2.dp)
                             ) {
                                 Text(
                                     text = "-15%",
-                                    fontSize = 11.sp,
+                                    fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = BlazonGold
                                 )
                             }
                         }
+                        // Duration
                         Text(
-                            text = "-Rs. $discountAmount",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = BlazonGold
+                            text = "$totalDuration min • Save Rs. $discountAmount",
+                            fontSize = 11.sp,
+                            color = BlazonMutedForeground
                         )
                     }
-                    
-                    Divider(
-                        color = BlazonSecondary,
-                        thickness = 1.dp
-                    )
-                    
+                }
+                
+                // Right: Checkout button
+                Box(
+                    modifier = Modifier
+                        .background(
+                            BlazonGold,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .clickable(enabled = !isCreating) { 
+                            viewModel.createMembership(userId, branchId) 
+                        }
+                        .padding(horizontal = 20.dp, vertical = 12.dp)
+                ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Text(
-                            text = "Total",
-                            fontSize = 18.sp,
+                            text = if (isCreating) "..." else "Checkout",
+                            fontSize = 15.sp,
                             fontWeight = FontWeight.Bold,
-                            color = BlazonForeground
+                            color = BlazonBlack
                         )
                         Text(
-                            text = "Rs. $finalPrice",
-                            fontSize = 24.sp,
+                            text = "→",
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = BlazonGold
+                            color = BlazonBlack
                         )
                     }
                 }
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                // Stats Row
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = "$totalServices",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = BlazonGold
-                        )
-                        Text(
-                            text = "Items",
-                            fontSize = 11.sp,
-                            color = BlazonMutedForeground
-                        )
-                    }
-                    
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = "$totalDuration",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = BlazonGold
-                        )
-                        Text(
-                            text = "Minutes",
-                            fontSize = 11.sp,
-                            color = BlazonMutedForeground
-                        )
-                    }
-                }
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                PremiumButton(
-                    text = if (isCreating) "Creating Membership..." else "Create Membership",
-                    onClick = { viewModel.createMembership(userId, branchId) },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = !isCreating
-                )
             }
         }
     }
