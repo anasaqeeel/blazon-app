@@ -183,47 +183,48 @@ fun MembershipScreen(
                                         .fillMaxWidth()
                                         .background(
                                             BlazonGold.copy(alpha = 0.15f),
-                                            shape = RoundedCornerShape(12.dp)
+                                            shape = RoundedCornerShape(16.dp)
                                         )
-                                        .padding(16.dp)
+                                        .padding(16.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
+                                    // 15% OFF Badge at top
+                                    Box(
+                                        modifier = Modifier
+                                            .background(
+                                                BlazonGold,
+                                                shape = RoundedCornerShape(20.dp)
+                                            )
+                                            .padding(horizontal = 20.dp, vertical = 8.dp)
                                     ) {
-                                        Column {
-                                            Text(
-                                                text = "Create Custom Membership",
-                                                fontSize = 18.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = BlazonGold
-                                            )
-                                            Spacer(modifier = Modifier.height(4.dp))
-                                            Text(
-                                                text = "Get 15% OFF on all selected services",
-                                                fontSize = 14.sp,
-                                                color = BlazonForeground
-                                            )
-                                        }
-                                        Box(
-                                            modifier = Modifier
-                                                .background(
-                                                    BlazonGold,
-                                                    shape = RoundedCornerShape(8.dp)
-                                                )
-                                                .padding(horizontal = 12.dp, vertical = 6.dp)
-                                        ) {
-                                            Text(
-                                                text = "15% OFF",
-                                                fontSize = 16.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = BlazonBlack
-                                            )
-                                        }
+                                        Text(
+                                            text = "15% OFF",
+                                            fontSize = 18.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = BlazonBlack
+                                        )
                                     }
+                                    
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    
+                                    Text(
+                                        text = "Create Custom Membership",
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = BlazonForeground,
+                                        textAlign = TextAlign.Center
+                                    )
+                                    
+                                    Spacer(modifier = Modifier.height(6.dp))
+                                    
+                                    Text(
+                                        text = "Select services below and get 15% discount",
+                                        fontSize = 14.sp,
+                                        color = BlazonMutedForeground,
+                                        textAlign = TextAlign.Center
+                                    )
                                 }
-                                Spacer(modifier = Modifier.height(8.dp))
+                                Spacer(modifier = Modifier.height(12.dp))
                             }
                             
                             items(state.services) { service ->
