@@ -48,9 +48,16 @@ object MockDataRepository {
             Service("s2", "Regular Style", ServiceCategory.Hair, 500, 20, "", "Basic hair styling"),
             Service("s3", "Fiber Styling", ServiceCategory.Hair, 700, 25, "", "Premium fiber-based styling"),
             Service("s4", "Hair-Do", ServiceCategory.Hair, 700, 30, "", "Complete hair styling service"),
+            Service("s45", "Hair Cut", ServiceCategory.Hair, 1500, 30, "", "Professional haircut"),
+            Service("s46", "Shampoo", ServiceCategory.Hair, 500, 15, "", "Hair shampoo service"),
+            Service("s47", "Deep Condition", ServiceCategory.Hair, 800, 20, "", "Deep hair conditioning treatment"),
+            Service("s48", "Hair Shine Boost", ServiceCategory.Hair, 2000, 40, "", "Hair shine enhancement"),
+            Service("s49", "Hair Shine Enhance", ServiceCategory.Hair, 2000, 40, "", "Premium hair shine treatment"),
             
             // BEARD SERVICES
             Service("s5", "Beard Reshaping (Cleansing & Scrubbing)", ServiceCategory.Beard, 800, 30, "", "Complete beard grooming with cleansing"),
+            Service("s50", "Beard Trim/Shave", ServiceCategory.Beard, 800, 25, "", "Professional beard trim or shave"),
+            Service("s51", "Shave", ServiceCategory.Beard, 600, 20, "", "Clean shave service"),
             
             // COLORING SERVICES
             Service("s6", "Keune Hair Color", ServiceCategory.Coloring, 700, 40, "", "Keune professional hair coloring"),
@@ -60,6 +67,7 @@ object MockDataRepository {
             Service("s10", "Color Repair", ServiceCategory.Coloring, 9000, 90, "", "Professional color correction (8000-10000)"),
             Service("s11", "L'Oreal Full Color", ServiceCategory.Coloring, 4750, 75, "", "Complete L'Oreal service (3500-6000)"),
             Service("s12", "Just For Men Color", ServiceCategory.Coloring, 4500, 60, "", "Men's specialized coloring (3000-6000)"),
+            Service("s52", "Hair Dye", ServiceCategory.Coloring, 1500, 45, "", "Professional hair dye service"),
             
             // TREATMENTS
             Service("s13", "Protein Dose", ServiceCategory.Treatments, 3000, 60, "", "Hair protein treatment"),
@@ -79,6 +87,17 @@ object MockDataRepository {
             Service("s23", "Janssen Facial", ServiceCategory.Skin, 6500, 60, "", "Janssen skincare facial"),
             Service("s24", "Skin Care Facial", ServiceCategory.Skin, 4500, 45, "", "Basic skincare facial"),
             Service("s25", "Combination Facial", ServiceCategory.Skin, 3000, 40, "", "Combination skin treatment"),
+            Service("s53", "Janssen Whitening Facial", ServiceCategory.Skin, 7000, 75, "", "Janssen whitening facial treatment"),
+            Service("s54", "Cleansing", ServiceCategory.Skin, 1500, 30, "", "Deep skin cleansing"),
+            Service("s55", "Exfoliation", ServiceCategory.Skin, 2000, 35, "", "Skin exfoliation treatment"),
+            Service("s56", "Face Mask", ServiceCategory.Skin, 1500, 25, "", "Face mask treatment"),
+            Service("s57", "Touch-Ups", ServiceCategory.Skin, 1000, 20, "", "Skin touch-up service"),
+            Service("s58", "Intensive Cleansing", ServiceCategory.Skin, 2500, 45, "", "Intensive deep cleansing"),
+            Service("s59", "Skin Toning", ServiceCategory.Skin, 1500, 30, "", "Skin toning treatment"),
+            Service("s60", "Cleansing & Toning", ServiceCategory.Skin, 2000, 35, "", "Combined cleansing and toning"),
+            Service("s61", "Multi Active Toning", ServiceCategory.Skin, 2000, 35, "", "Multi-active skin toning"),
+            Service("s62", "Oil Control Treatment", ServiceCategory.Skin, 2000, 40, "", "Oil control facial treatment"),
+            Service("s63", "Brightening Mask", ServiceCategory.Skin, 1800, 30, "", "Skin brightening mask"),
             
             // POLISHER
             Service("s26", "Face Polisher", ServiceCategory.Polisher, 1500, 30, "", "Face polishing service"),
@@ -88,6 +107,10 @@ object MockDataRepository {
             Service("s30", "Neck Polisher", ServiceCategory.Polisher, 800, 20, "", "Neck polishing service"),
             Service("s31", "Black Mask", ServiceCategory.Polisher, 600, 20, "", "Black mask treatment"),
             Service("s32", "Mud Mask", ServiceCategory.Polisher, 500, 15, "", "Mud mask treatment"),
+            Service("s64", "Whiten Face Polisher", ServiceCategory.Polisher, 1800, 35, "", "Whitening face polisher"),
+            Service("s65", "Full Hands and Neck Polish", ServiceCategory.Polisher, 2500, 50, "", "Complete hands and neck polishing"),
+            Service("s66", "Black/White Heads Removal", ServiceCategory.Polisher, 2000, 40, "", "Black and white heads removal"),
+            Service("s67", "Microfoliant Exfoliation", ServiceCategory.Polisher, 2200, 45, "", "Microfoliant exfoliation treatment"),
             
             // MASSAGE
             Service("s33", "Head Massage", ServiceCategory.Massage, 700, 30, "", "Relaxing head massage"),
@@ -97,6 +120,8 @@ object MockDataRepository {
             
             // NAIL CARE
             Service("s37", "Manicure/Pedicure", ServiceCategory.Nails, 5000, 90, "", "Complete nail care service"),
+            Service("s68", "Whitening Manicure", ServiceCategory.Nails, 3000, 60, "", "Whitening manicure service"),
+            Service("s69", "Whitening Manicure & Pedicure", ServiceCategory.Nails, 5500, 120, "", "Complete whitening nail care"),
             
             // WAX
             Service("s38", "Full Face Wax", ServiceCategory.Wax, 1500, 30, "", "Complete face waxing"),
@@ -213,6 +238,153 @@ object MockDataRepository {
     suspend fun getPromotionsByBranch(branchId: String): List<Promotion> {
         delay(300)
         return mockPromotions.filter { it.branchId == branchId }
+    }
+    
+    // Grooming Packages
+    val groomingPackages = listOf(
+        GroomingPackage(
+            id = "pkg-1",
+            name = "Grooming Package",
+            price = 22000,
+            description = "Complete grooming package for pre-wedding and wedding events",
+            preWeddingServices = listOf(
+                "Skin Care Facial",
+                "Black/White Heads Removal",
+                "Hair Shine Boost/Hair Dye",
+                "Microfoliant Exfoliation",
+                "Whitening Manicure",
+                "Intensive Cleansing",
+                "Beard Trim/Shave",
+                "Face Polisher",
+                "Skin Toning",
+                "Black Mask",
+                "Hair Cut"
+            ),
+            mehndiBaratWalimaServices = listOf(
+                "Cleansing",
+                "Exfoliation",
+                "Face Mask",
+                "Touch-Ups",
+                "Shave",
+                "Shampoo",
+                "Deep Condition",
+                "Hair-Do"
+            ),
+            branchId = "islamabad-1"
+        ),
+        GroomingPackage(
+            id = "pkg-2",
+            name = "Premium Grooming Package",
+            price = 24000,
+            description = "Premium package with Janssen whitening facial",
+            preWeddingServices = listOf(
+                "Janssen Whitening Facial",
+                "Black/White Heads Removal",
+                "Hair Shine Boost/Hair Dye",
+                "Microfoliant Exfoliation",
+                "Whitening Manicure",
+                "Intensive Cleansing",
+                "Beard Trim/Shave",
+                "Face Polisher",
+                "Skin Toning",
+                "Black Mask",
+                "Hair Cut"
+            ),
+            mehndiBaratWalimaServices = listOf(
+                "Cleansing",
+                "Exfoliation",
+                "Face Mask",
+                "Touch-Ups",
+                "Shave",
+                "Shampoo",
+                "Deep Condition",
+                "Hair-Do"
+            ),
+            branchId = "islamabad-1"
+        ),
+        GroomingPackage(
+            id = "pkg-3",
+            name = "Premium Plus Grooming Package",
+            price = 26000,
+            description = "Premium plus with Thalgo facial and enhanced services",
+            preWeddingServices = listOf(
+                "Thalgo Facial",
+                "Whitening Manicure & Pedicure",
+                "Full Hands and Neck Polish",
+                "Black/White Heads Removal",
+                "Hair Shine Enhance/Hair Dye",
+                "Whiten Face Polisher",
+                "Oil Control Treatment",
+                "Cleansing & Toning",
+                "Brightening Mask",
+                "Beard Trim/Shave",
+                "Hair Cut"
+            ),
+            mehndiBaratWalimaServices = listOf(
+                "Cleansing",
+                "Exfoliation",
+                "Face Mask",
+                "Touch-Ups",
+                "Shave",
+                "Shampoo",
+                "Deep Condition",
+                "Hair-Do"
+            ),
+            branchId = "islamabad-1"
+        ),
+        GroomingPackage(
+            id = "pkg-4",
+            name = "Signature Grooming Package",
+            price = 33000,
+            description = "Ultimate signature package with Dermalogica facial",
+            preWeddingServices = listOf(
+                "Dermalogica Facial",
+                "Whitening Manicure & Pedicure",
+                "Full Hands and Neck Polish",
+                "Black/White Heads Removal",
+                "Hair Shine Enhance/Hair Dye",
+                "Whiten Face Polisher",
+                "Cleansing & Exfoliation",
+                "Multi Active Toning",
+                "Brightening Mask",
+                "Beard Trim/Shave",
+                "Hair Cut"
+            ),
+            mehndiBaratWalimaServices = listOf(
+                "Cleansing",
+                "Exfoliation",
+                "Face Mask",
+                "Touch-Ups",
+                "Shave",
+                "Shampoo",
+                "Deep Condition",
+                "Hair-Do"
+            ),
+            branchId = "islamabad-1"
+        ),
+        GroomingPackage(
+            id = "pkg-5",
+            name = "Wedding Day Services",
+            price = 5000,
+            description = "Essential services for your wedding day",
+            preWeddingServices = emptyList(),
+            mehndiBaratWalimaServices = listOf(
+                "Cleansing",
+                "Exfoliation",
+                "Face Mask",
+                "Touch-Ups",
+                "Shave",
+                "Shampoo",
+                "Deep Condition",
+                "Hair-Do"
+            ),
+            branchId = "islamabad-1"
+        )
+    )
+    
+    suspend fun getGroomingPackages(branchId: String): List<GroomingPackage> {
+        delay(300)
+        return groomingPackages.filter { it.branchId == branchId }
     }
 }
 
