@@ -46,14 +46,28 @@ fun MembershipScreen(
         viewModel.loadServices(branchId)
     }
     
-    // Calculate prices with 15% discount
-    val totalPrice = viewModel.getTotalPrice()
-    val totalDuration = viewModel.getTotalDuration()
-    val totalServices = viewModel.getTotalServices()
+    // Calculate prices with 15% discount - derived from serviceQuantities for reactivity
+    val hasSelections = serviceQuantities.isNotEmpty()
+    val totalServices = serviceQuantities.values.sum()
+    val totalPrice = remember(serviceQuantities, uiState) {
+        if (uiState is MembershipUiState.Success) {
+            serviceQuantities.entries.sumOf { (serviceId, qty) ->
+                val service = (uiState as MembershipUiState.Success).services.find { it.id == serviceId }
+                (service?.price ?: 0) * qty
+            }
+        } else 0
+    }
+    val totalDuration = remember(serviceQuantities, uiState) {
+        if (uiState is MembershipUiState.Success) {
+            serviceQuantities.entries.sumOf { (serviceId, qty) ->
+                val service = (uiState as MembershipUiState.Success).services.find { it.id == serviceId }
+                (service?.duration ?: 0) * qty
+            }
+        } else 0
+    }
     val discountPercent = 15
     val discountAmount = (totalPrice * discountPercent) / 100
     val finalPrice = totalPrice - discountAmount
-    val hasSelections = viewModel.hasSelectedServices()
     
     Box(
         modifier = Modifier
@@ -256,114 +270,84 @@ fun MembershipScreen(
             }
         }
         
-        // Compact Floating Cart Bar
+        // Clean Floating Cart Bar
         if (hasSelections && showCustomMembership) {
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
                     .background(
                         BlazonCard,
-                        shape = RoundedCornerShape(16.dp)
+                        shape = RoundedCornerShape(50.dp)
                     )
-                    .padding(12.dp),
+                    .padding(horizontal = 6.dp, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Left: Items count badge + Price info
+                // Left side: Icon stats
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.padding(start = 12.dp)
                 ) {
-                    // Items badge
-                    Box(
-                        modifier = Modifier
-                            .size(44.dp)
-                            .background(BlazonGold, shape = RoundedCornerShape(12.dp)),
-                        contentAlignment = Alignment.Center
-                    ) {
+                    // Items count
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = "🛒", fontSize = 18.sp)
+                        Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = "$totalServices",
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = BlazonBlack
+                            color = BlazonForeground
                         )
                     }
                     
-                    // Price column
-                    Column {
-                        // Crossed original price
-                        if (discountAmount > 0) {
-                            Text(
-                                text = "Rs. $totalPrice",
-                                fontSize = 12.sp,
-                                color = BlazonMutedForeground,
-                                textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough
-                            )
-                        }
-                        // Final price
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Text(
-                                text = "Rs. $finalPrice",
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = BlazonGold
-                            )
-                            // Discount badge
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        BlazonGold.copy(alpha = 0.2f),
-                                        shape = RoundedCornerShape(4.dp)
-                                    )
-                                    .padding(horizontal = 5.dp, vertical = 2.dp)
-                            ) {
-                                Text(
-                                    text = "-15%",
-                                    fontSize = 10.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = BlazonGold
-                                )
-                            }
-                        }
-                        // Duration
+                    // Duration
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = "⏱", fontSize = 16.sp)
+                        Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "$totalDuration min • Save Rs. $discountAmount",
-                            fontSize = 11.sp,
+                            text = "${totalDuration}m",
+                            fontSize = 14.sp,
                             color = BlazonMutedForeground
                         )
                     }
                 }
                 
-                // Right: Checkout button
-                Box(
-                    modifier = Modifier
-                        .background(
-                            BlazonGold,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .clickable(enabled = !isCreating) { 
-                            viewModel.createMembership(userId, branchId) 
-                        }
-                        .padding(horizontal = 20.dp, vertical = 12.dp)
+                // Right: Price + Checkout
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    // Price with discount
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(
+                            text = "Rs. $finalPrice",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = BlazonGold
+                        )
+                        Text(
+                            text = "Save Rs. $discountAmount",
+                            fontSize = 10.sp,
+                            color = BlazonMutedForeground
+                        )
+                    }
+                    
+                    // Checkout button
+                    Box(
+                        modifier = Modifier
+                            .size(50.dp)
+                            .background(BlazonGold, shape = RoundedCornerShape(50))
+                            .clickable(enabled = !isCreating) { 
+                                viewModel.createMembership(userId, branchId) 
+                            },
+                        contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = if (isCreating) "..." else "Checkout",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = BlazonBlack
-                        )
-                        Text(
-                            text = "→",
-                            fontSize = 16.sp,
+                            text = if (isCreating) "⏳" else "→",
+                            fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = BlazonBlack
                         )
