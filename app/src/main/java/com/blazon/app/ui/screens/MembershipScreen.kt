@@ -190,7 +190,7 @@ fun MembershipScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth()
-                                .padding(bottom = if (hasSelections) 130.dp else 60.dp),
+                                .padding(bottom = if (hasSelections) 80.dp else 0.dp),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
@@ -270,84 +270,69 @@ fun MembershipScreen(
             }
         }
         
-        // Cart Summary Bar - compact design above bottom nav
+        // Cart Summary Bar - floating above content, not overlapping nav
         if (hasSelections && showCustomMembership) {
-            Column(
+            Box(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .padding(bottom = 60.dp) // Space for bottom nav
-                    .background(BlazonCard, shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                    .padding(horizontal = 16.dp, vertical = 10.dp)
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
-                // Compact Stats Row + Button in one row
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(BlazonCard, shape = RoundedCornerShape(14.dp))
+                        .padding(horizontal = 14.dp, vertical = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Stats
+                    // Stats - compact
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(20.dp)
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        // Services
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 text = "$totalServices",
-                                fontSize = 20.sp,
+                                fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = BlazonGold
                             )
-                            Text(
-                                text = "Items",
-                                fontSize = 10.sp,
-                                color = BlazonMutedForeground
-                            )
+                            Text(text = "Items", fontSize = 9.sp, color = BlazonMutedForeground)
                         }
                         
-                        // Minutes
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 text = "$totalDuration",
-                                fontSize = 20.sp,
+                                fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = BlazonGold
                             )
-                            Text(
-                                text = "Min",
-                                fontSize = 10.sp,
-                                color = BlazonMutedForeground
-                            )
+                            Text(text = "Min", fontSize = 9.sp, color = BlazonMutedForeground)
                         }
                         
-                        // Total
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 text = "Rs.$finalPrice",
-                                fontSize = 20.sp,
+                                fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = BlazonGold
                             )
-                            Text(
-                                text = "-15%",
-                                fontSize = 10.sp,
-                                color = BlazonMutedForeground
-                            )
+                            Text(text = "-15%", fontSize = 9.sp, color = BlazonMutedForeground)
                         }
                     }
                     
-                    // Checkout button - compact
+                    // Checkout button
                     Box(
                         modifier = Modifier
                             .background(BlazonGold, shape = RoundedCornerShape(10.dp))
                             .clickable(enabled = !isCreating) { 
                                 viewModel.createMembership(userId, branchId) 
                             }
-                            .padding(horizontal = 16.dp, vertical = 10.dp)
+                            .padding(horizontal = 14.dp, vertical = 10.dp)
                     ) {
                         Text(
                             text = if (isCreating) "..." else "Checkout →",
-                            fontSize = 14.sp,
+                            fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
                             color = BlazonBlack
                         )
