@@ -3,6 +3,7 @@ package com.blazon.app.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blazon.app.data.model.Branch
+import com.blazon.app.data.model.LoyaltyInfo
 import com.blazon.app.data.model.User
 import com.blazon.app.data.repository.MockDataRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,9 +21,10 @@ class ProfileViewModel : ViewModel() {
             try {
                 val branch = MockDataRepository.getBranchById(branchId)
                 val user = MockDataRepository.getUserData(userId)
-                
+                val loyaltyInfo = MockDataRepository.getLoyaltyInfo(userId)
+
                 if (branch != null && user != null) {
-                    _uiState.value = ProfileUiState.Success(branch, user)
+                    _uiState.value = ProfileUiState.Success(branch, user, loyaltyInfo)
                 } else {
                     _uiState.value = ProfileUiState.Error("Data not found")
                 }
@@ -35,7 +37,10 @@ class ProfileViewModel : ViewModel() {
 
 sealed class ProfileUiState {
     object Loading : ProfileUiState()
-    data class Success(val branch: Branch, val user: User) : ProfileUiState()
+    data class Success(
+        val branch: Branch,
+        val user: User,
+        val loyaltyInfo: LoyaltyInfo? = null
+    ) : ProfileUiState()
     data class Error(val message: String) : ProfileUiState()
 }
-

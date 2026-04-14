@@ -23,19 +23,13 @@ fun PremiumCard(
 ) {
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = if (isHighlighted) {
-                BlazonCard.copy(alpha = 0.8f)
-            } else {
-                BlazonCard
-            }
-        ),
+        colors = CardDefaults.cardColors(containerColor = BlazonCard),
         border = if (isHighlighted) {
-            androidx.compose.foundation.BorderStroke(1.dp, BlazonGold.copy(alpha = 0.3f))
+            androidx.compose.foundation.BorderStroke(1.5.dp, BlazonGold.copy(alpha = 0.7f))
         } else {
             androidx.compose.foundation.BorderStroke(1.dp, BlazonSecondary)
         },
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(14.dp)
     ) {
         Column(
             modifier = Modifier
@@ -56,8 +50,8 @@ fun GradientCard(
         colors = CardDefaults.cardColors(
             containerColor = BlazonCard
         ),
-        border = androidx.compose.foundation.BorderStroke(1.dp, BlazonGold.copy(alpha = 0.3f)),
-        shape = RoundedCornerShape(12.dp)
+        border = androidx.compose.foundation.BorderStroke(1.dp, BlazonGold.copy(alpha = 0.4f)),
+        shape = RoundedCornerShape(14.dp)
     ) {
         Box(
             modifier = Modifier

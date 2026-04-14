@@ -2,6 +2,9 @@ package com.blazon.app.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,14 +29,15 @@ fun ProfileScreen(
     branchId: String,
     userId: String,
     onChangeBranch: () -> Unit,
+    onNavigateToRewards: () -> Unit,
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    
+
     LaunchedEffect(branchId, userId) {
         viewModel.loadData(branchId, userId)
     }
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,7 +48,7 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    brush = androidx.compose.ui.graphics.Brush.verticalGradient(
+                    brush = Brush.verticalGradient(
                         colors = listOf(BlazonCard, BlazonBlack)
                     )
                 )
@@ -56,7 +61,7 @@ fun ProfileScreen(
                 color = BlazonForeground
             )
         }
-        
+
         // Content
         when (val state = uiState) {
             is ProfileUiState.Loading -> {
@@ -67,11 +72,12 @@ fun ProfileScreen(
                     CircularProgressIndicator(color = BlazonGold)
                 }
             }
-            
+
             is ProfileUiState.Success -> {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
                         .padding(16.dp)
                         .padding(bottom = 80.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -91,7 +97,7 @@ fun ProfileScreen(
                             color = BlazonForeground
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        
+
                         Text(
                             text = "Phone",
                             fontSize = 12.sp,
@@ -105,7 +111,7 @@ fun ProfileScreen(
                             color = BlazonForeground
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        
+
                         Text(
                             text = "Loyalty Status",
                             fontSize = 12.sp,
@@ -119,7 +125,102 @@ fun ProfileScreen(
                             color = BlazonGold
                         )
                     }
-                    
+
+                    // Points Summary Card
+                    state.loyaltyInfo?.let { info ->
+                        PremiumCard(isHighlighted = true) {
+                            Text(
+                                text = "Rewards Points",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = BlazonForeground
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "Available Points",
+                                    fontSize = 14.sp,
+                                    color = BlazonMutedForeground
+                                )
+                                Text(
+                                    text = "${info.totalPoints}",
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = BlazonGold
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "Lifetime Points",
+                                    fontSize = 14.sp,
+                                    color = BlazonMutedForeground
+                                )
+                                Text(
+                                    text = "${info.lifetimePoints}",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = BlazonForeground
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "Earning Rate",
+                                    fontSize = 14.sp,
+                                    color = BlazonMutedForeground
+                                )
+                                Text(
+                                    text = "${info.tierMultiplier}x",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = BlazonGold
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "Visit Streak",
+                                    fontSize = 14.sp,
+                                    color = BlazonMutedForeground
+                                )
+                                Text(
+                                    text = "${info.currentStreak} visits",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = BlazonForeground
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            PremiumButton(
+                                text = "View Rewards & Redeem",
+                                onClick = onNavigateToRewards,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
+
                     // Current Branch
                     PremiumCard {
                         Text(
@@ -135,7 +236,7 @@ fun ProfileScreen(
                             color = BlazonForeground
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        
+
                         PremiumButton(
                             text = "Change Branch",
                             onClick = onChangeBranch,
@@ -143,17 +244,17 @@ fun ProfileScreen(
                             isPrimary = false
                         )
                     }
-                    
+
                     // Loyalty Info
                     PremiumCard {
                         Text(
-                            text = "Loyalty Rewards",
+                            text = "Visit Rewards",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = BlazonForeground
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        
+
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -170,9 +271,9 @@ fun ProfileScreen(
                                 color = BlazonForeground
                             )
                         }
-                        
+
                         Spacer(modifier = Modifier.height(12.dp))
-                        
+
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -194,7 +295,7 @@ fun ProfileScreen(
                             )
                         }
                     }
-                    
+
                     // Support
                     PremiumCard {
                         Column(
@@ -214,7 +315,7 @@ fun ProfileScreen(
                             )
                         }
                     }
-                    
+
                     // About
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -234,7 +335,7 @@ fun ProfileScreen(
                     }
                 }
             }
-            
+
             is ProfileUiState.Error -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -249,4 +350,3 @@ fun ProfileScreen(
         }
     }
 }
-

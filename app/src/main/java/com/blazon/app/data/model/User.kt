@@ -12,7 +12,11 @@ data class User(
     val loyaltyStatus: LoyaltyStatus,
     val discountEligible: Boolean,
     val discountUnlockedAt: Date? = null,
-    val createdAt: Date
+    val createdAt: Date,
+    val totalPoints: Int = 0,
+    val lifetimePoints: Int = 0,
+    val currentStreak: Int = 0,
+    val longestStreak: Int = 0
 )
 
 enum class LoyaltyStatus {

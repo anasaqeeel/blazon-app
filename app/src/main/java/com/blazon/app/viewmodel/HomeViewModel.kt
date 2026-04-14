@@ -13,21 +13,25 @@ class HomeViewModel : ViewModel() {
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    fun loadData(branchId: String) {
+    fun loadData(branchId: String, userId: String = "user-1") {
         viewModelScope.launch {
             _uiState.value = HomeUiState.Loading
             try {
                 val branch = MockDataRepository.getBranchById(branchId)
                 val availability = MockDataRepository.getBarberAvailability(branchId)
                 val promotions = MockDataRepository.getPromotionsByBranch(branchId)
-                val user = MockDataRepository.getUserData("user-1")
-                
+                val user = MockDataRepository.getUserData(userId)
+                val loyaltyInfo = MockDataRepository.getLoyaltyInfo(userId)
+                val serviceProgress = MockDataRepository.getServiceProgress(userId)
+
                 if (branch != null) {
                     _uiState.value = HomeUiState.Success(
                         branch = branch,
                         availability = availability,
                         promotions = promotions,
-                        user = user
+                        user = user,
+                        loyaltyInfo = loyaltyInfo,
+                        serviceProgress = serviceProgress
                     )
                 } else {
                     _uiState.value = HomeUiState.Error("Branch not found")
@@ -45,8 +49,9 @@ sealed class HomeUiState {
         val branch: Branch,
         val availability: BarberAvailability?,
         val promotions: List<Promotion>,
-        val user: User?
+        val user: User?,
+        val loyaltyInfo: LoyaltyInfo? = null,
+        val serviceProgress: List<ServiceProgress> = emptyList()
     ) : HomeUiState()
     data class Error(val message: String) : HomeUiState()
 }
-

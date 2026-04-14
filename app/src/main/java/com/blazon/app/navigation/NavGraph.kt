@@ -23,14 +23,14 @@ fun BlazonNavGraph(
 ) {
     var selectedBranchId by remember { mutableStateOf<String?>(null) }
     val userId = "user-1"
-    
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    
-    val showBottomNav = currentRoute != null && 
-        currentRoute != Screen.Splash.route && 
+
+    val showBottomNav = currentRoute != null &&
+        currentRoute != Screen.Splash.route &&
         currentRoute != Screen.BranchSelection.route
-    
+
     Box(modifier = Modifier.fillMaxSize()) {
         NavHost(
             navController = navController,
@@ -54,7 +54,7 @@ fun BlazonNavGraph(
                     }
                 )
             }
-            
+
             composable(Screen.BranchSelection.route) {
                 BranchSelectionScreen(
                     onBranchSelected = { branchId ->
@@ -65,12 +65,13 @@ fun BlazonNavGraph(
                     }
                 )
             }
-            
+
             composable(Screen.Home.route) {
                 val branchId = selectedBranchId ?: return@composable
-                
+
                 HomeScreen(
                     branchId = branchId,
+                    userId = userId,
                     onNavigateToServices = {
                         navController.navigate(Screen.Services.route)
                     },
@@ -82,37 +83,40 @@ fun BlazonNavGraph(
                     },
                     onNavigateToVisitTracking = {
                         navController.navigate(Screen.VisitTracking.route)
+                    },
+                    onNavigateToRewards = {
+                        navController.navigate(Screen.Rewards.route)
                     }
                 )
             }
-            
+
             composable(Screen.Services.route) {
                 val branchId = selectedBranchId ?: return@composable
-                
+
                 ServicesScreen(branchId = branchId)
             }
-            
+
             composable(Screen.Membership.route) {
                 val branchId = selectedBranchId ?: return@composable
-                
+
                 MembershipScreen(
                     branchId = branchId,
                     userId = userId
                 )
             }
-            
+
             composable(Screen.VisitTracking.route) {
                 val branchId = selectedBranchId ?: return@composable
-                
+
                 VisitTrackingScreen(
                     branchId = branchId,
                     userId = userId
                 )
             }
-            
+
             composable(Screen.Profile.route) {
                 val branchId = selectedBranchId ?: return@composable
-                
+
                 ProfileScreen(
                     branchId = branchId,
                     userId = userId,
@@ -121,11 +125,27 @@ fun BlazonNavGraph(
                         navController.navigate(Screen.BranchSelection.route) {
                             popUpTo(0) { inclusive = true }
                         }
+                    },
+                    onNavigateToRewards = {
+                        navController.navigate(Screen.Rewards.route)
                     }
                 )
             }
+
+            composable(Screen.Rewards.route) {
+                RewardsScreen(
+                    userId = userId,
+                    onNavigateToHistory = {
+                        navController.navigate(Screen.PointsHistory.route)
+                    }
+                )
+            }
+
+            composable(Screen.PointsHistory.route) {
+                PointsHistoryScreen(userId = userId)
+            }
         }
-        
+
         // Bottom Navigation Bar
         if (showBottomNav) {
             BlazonBottomNavigationBar(
@@ -146,4 +166,3 @@ fun BlazonNavGraph(
         }
     }
 }
-

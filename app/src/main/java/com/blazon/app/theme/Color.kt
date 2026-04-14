@@ -3,15 +3,18 @@ package com.blazon.app.theme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.ui.graphics.Color
 
-// Premium Dark Theme - Black & Gold
-val BlazonBlack = Color(0xFF0A0A0A)
-val BlazonGold = Color(0xFFD4AF37)
-val BlazonCard = Color(0xFF1A1A1A)
-val BlazonSecondary = Color(0xFF2A2A2A)
-val BlazonMuted = Color(0xFF3A3A3A)
-val BlazonMutedForeground = Color(0xFFA0A0A0)
-val BlazonForeground = Color(0xFFF5F5F5)
-val BlazonDestructive = Color(0xFFEF4444)
+// Blazon Salon — Black & Gold premium theme
+// Matches the brand menu / in-salon materials: pure black background,
+// warm gold accent, dark gray elevated surfaces, subtle gold borders.
+val BlazonBlack = Color(0xFF0A0A0A)            // Near-pure black background
+val BlazonGold = Color(0xFFE5B93B)             // Warm brand gold
+val BlazonGoldDeep = Color(0xFFB8891F)         // Deeper gold for gradients / pressed
+val BlazonCard = Color(0xFF161616)             // Elevated surface (cards)
+val BlazonSecondary = Color(0xFF1F1F1F)        // Secondary surface / chips
+val BlazonMuted = Color(0xFF2A2A2A)            // Separators / outlines
+val BlazonMutedForeground = Color(0xFF9A9A9A)  // Muted text
+val BlazonForeground = Color(0xFFF5F5F5)       // Primary text
+val BlazonDestructive = Color(0xFFEF4444)      // Error / destructive
 
 val DarkColorScheme = darkColorScheme(
     primary = BlazonGold,
@@ -28,7 +31,6 @@ val DarkColorScheme = darkColorScheme(
     onSurfaceVariant = BlazonMutedForeground,
     error = BlazonDestructive,
     onError = BlazonForeground,
-    outline = BlazonSecondary,
-    outlineVariant = BlazonMuted
+    outline = BlazonMuted,
+    outlineVariant = BlazonSecondary
 )
-
